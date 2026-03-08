@@ -1,53 +1,87 @@
-🦜 Personal Research Assistant
+# 🦜 Personal Research Assistant
 
-Chat with your own documents using a local LLM.
-Built with LangChain, LangSmith, Ollama, and ChromaDB.
+A **local AI research assistant** that allows you to chat with your own documents.  
+Built using **LangChain, Ollama, ChromaDB, and LangSmith**.
 
-This project allows you to:
+This project uses **Retrieval Augmented Generation (RAG)** to retrieve relevant information from your documents and answer questions using a local LLM.
 
-Load PDF or text documents
+---
 
-Convert them into embeddings
+# ✨ Features
 
-Store them in a vector database
+- Chat with your **PDF and text documents**
+- Runs **locally with Ollama**
+- Uses **ChromaDB vector database**
+- Built with **LangChain RAG pipeline**
+- Automatic **LangSmith tracing**
+- Simple **CLI interface**
 
-Ask questions about them using a local LLM
+---
 
-Requirements
+# 🛠️ Tech Stack
 
-Make sure you have the following installed:
+- **LangChain**
+- **Ollama**
+- **ChromaDB**
+- **LangSmith**
+- **Sentence Transformers**
+- **Python**
+- **uv (Python package manager)**
 
-Ollama
+---
 
-uv (Python package manager)
+# 📋 Requirements
 
-Python 3.10+
+Make sure the following tools are installed:
 
-LangSmith account (free)
+- Python **3.10+**
+- **Ollama**
+- **uv**
+- A **LangSmith account (free)**
 
-Install Ollama from:
+### Install Ollama
+
+Download from:
+
 https://ollama.com
 
-Install uv:
+### Install uv
 
+```bash
 pip install uv
-Setup
-1. Install Dependencies
+```
+
+---
+
+# ⚙️ Setup
+
+## 1️⃣ Install Dependencies
 
 Run the following commands:
 
+```bash
 uv add langchain langchain-ollama langchain-community langchain-core
 uv add langchain-text-splitters chromadb sentence-transformers
 uv add langsmith python-dotenv rich pypdf
-2. Pull the LLM Model
+```
 
-Download the model using Ollama:
+---
 
+## 2️⃣ Pull the LLM Model
+
+Download the model with Ollama:
+
+```bash
 ollama pull llama3.2:3b
-3. Create the .env File
+```
 
-Create a .env file in the root directory and add:
+---
 
+## 3️⃣ Create Environment File
+
+Create a `.env` file in the project root:
+
+```env
 LANGCHAIN_TRACING_V2=true
 LANGCHAIN_ENDPOINT=https://api.smith.langchain.com
 LANGCHAIN_API_KEY=ls__your_key_here
@@ -63,98 +97,144 @@ DOCS_DIR=./docs
 CHUNK_SIZE=1000
 CHUNK_OVERLAP=200
 RETRIEVAL_K=4
+```
 
-Get your LangSmith API key from:
+Get your **LangSmith API key** from:
 
-https://smith.langchain.com
+https://smith.langchain.com → **Settings → API Keys**
 
-Go to Settings → API Keys
+---
 
-4. Add Your Documents
+# 📂 Add Your Documents
 
-Place any files you want to chat with inside the docs/ folder.
+Place your files inside the **docs/** folder.
 
 Supported formats:
 
-.pdf
-
-.txt
+- `.pdf`
+- `.txt`
 
 Example:
 
+```
 docs/
    research_paper.pdf
    notes.txt
-Running the Project
-1. Test Ollama Connection
+```
+
+---
+
+# 🚀 Running the Project
+
+## 1️⃣ Test Ollama Connection
+
+```bash
 uv run python -m research_assistant.main demo
-2. Ingest Documents
+```
 
-Run this once (or whenever you add new documents):
+---
 
+## 2️⃣ Ingest Documents
+
+Run this **once** (or whenever you add new documents):
+
+```bash
 uv run python -m research_assistant.main ingest
+```
 
 This will:
 
-Split documents into chunks
+- Load the documents
+- Split them into chunks
+- Generate embeddings
+- Store them in **ChromaDB**
 
-Generate embeddings
+---
 
-Store them in ChromaDB
+## 3️⃣ Start Chatting
 
-3. Start Chatting
+```bash
 uv run python -m research_assistant.main chat
+```
 
-Now you can ask questions about your documents.
+Example query:
 
-Example:
+```
+What are the main findings of the research paper?
+```
 
-> What is the main idea of the research paper?
-Project Structure
+---
+
+# 📁 Project Structure
+
+```
 research-assistant/
+│
 ├── .env
 ├── pyproject.toml
-├── docs/                # Put your PDFs or text files here
+├── docs/                 # Put PDFs and text files here
+│
 └── src/
     └── research_assistant/
-        ├── config.py    # Configuration settings
-        ├── ingest.py    # Document loading + vector store
-        ├── chain.py     # RAG pipeline
-        └── main.py      # CLI entry point
-How It Works
-1. Ingest
+        ├── config.py     # Configuration settings
+        ├── ingest.py     # Document loading and vector store
+        ├── chain.py      # RAG chain
+        └── main.py       # CLI entry point
+```
 
-Documents are:
+---
 
-Split into chunks
+# ⚙️ How It Works
 
-Converted into embeddings using all-MiniLM-L6-v2
+### 1️⃣ Document Ingestion
 
-Stored locally in ChromaDB
+- Documents are split into smaller **text chunks**
+- Chunks are converted into **embeddings**
+- Stored in **ChromaDB vector database**
 
-2. Query
+Embeddings model used:
 
-When you ask a question:
+```
+all-MiniLM-L6-v2
+```
 
-The question is converted into an embedding
+---
 
-The system retrieves the top 4 most similar chunks
+### 2️⃣ Query Processing
 
-Those chunks are sent to Llama 3.2 (3B) as context
+When a user asks a question:
 
-The model generates an answer
+1. The question is converted into an **embedding**
+2. The system retrieves the **top 4 most similar chunks**
+3. The chunks are passed to the **LLM (Llama 3.2 3B)**
+4. The model generates a response based on the context
 
-3. Trace
+---
 
-Every step is logged in LangSmith, allowing you to inspect:
+### 3️⃣ LangSmith Tracing
 
-prompts
+Every step of the pipeline is automatically logged to **LangSmith**, allowing you to inspect:
 
-retrieved chunks
+- prompts
+- retrieved chunks
+- LLM responses
+- pipeline performance
 
-LLM responses
+---
 
-chain performance
+# 📌 Example Use Cases
 
-✅ Result:
-You get a local ChatGPT-like assistant for your own documents.
+- Research paper analysis
+- Studying from PDFs
+- Personal knowledge base
+- Document Q&A assistant
+
+---
+
+# 📜 License
+
+MIT License
+
+---
+
+# ⭐ If you found this project useful, consider giving it a star!
