@@ -1,0 +1,42 @@
+.env
+# Virtual environment
+
+.venv/
+
+# Environment variables
+
+.env
+
+# Python cache files
+
+**pycache**/
+*.pyc
+*.pyo
+*.pyd
+
+# Vector database (used by Chroma)
+
+chroma_db/
+
+# Python build files
+
+build/
+dist/
+*.egg-info/
+
+# Jupyter notebook checkpoints
+
+.ipynb_checkpoints/
+
+# Logs
+
+*.log
+
+# VS Code settings (optional)
+
+.vscode/
+
+# OS files
+
+.DS_Store
+Thumbs.db
